@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:medicine_finder/components/layout.dart';
 import 'package:medicine_finder/screen/loginscreen.dart';
 
 class SplashScreen extends StatefulWidget {
@@ -28,7 +29,7 @@ class _SplashScreenState extends State<SplashScreen>
                   Navigator.pushReplacement(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => const LoginScreen(),
+                      builder: (context) => const LayoutScreen(),
                     ),
                   ),
                 }
@@ -37,7 +38,7 @@ class _SplashScreenState extends State<SplashScreen>
                   Navigator.pushReplacement(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => const LoginScreen(),
+                      builder: (context) => const LayoutScreen(),
                     ),
                   ),
                 }
@@ -46,7 +47,7 @@ class _SplashScreenState extends State<SplashScreen>
 
   startAnimation() {
     _controller = AnimationController(
-      duration: const Duration(seconds: 2),
+      duration: const Duration(seconds: 3),
       vsync: this,
     )..repeat();
   }
@@ -94,10 +95,10 @@ class _SplashScreenState extends State<SplashScreen>
           Container(
             decoration: const BoxDecoration(
               color: Colors.black,
-              gradient: LinearGradient(
-                  colors: [(Color(0xFF5E35B1)), (Color(0xFF7B1FA2))],
-                  begin: Alignment.topCenter,
-                  end: Alignment.bottomCenter),
+              gradient: LinearGradient(colors: [
+                (Color(0xFF6BB3ED)),
+                (Color.fromARGB(255, 11, 117, 203))
+              ], begin: Alignment.topCenter, end: Alignment.bottomCenter),
             ),
           ),
           Center(
@@ -106,7 +107,7 @@ class _SplashScreenState extends State<SplashScreen>
               children: [
                 AnimatedBuilder(
                   animation: _controller!,
-                  child: Image.asset('assets/images/MainGuitarLogo.png'),
+                  child: Image.asset('assets/images/logo.png'),
                   builder: (context, child) {
                     return Transform.rotate(
                       angle: _controller!.value * 2.0 * pi,
