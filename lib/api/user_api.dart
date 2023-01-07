@@ -1,6 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:medicine_finder/api/http_services.dart';
+import 'package:medicine_finder/response/login_response.dart';
 import 'package:medicine_finder/utils/url.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -26,31 +27,31 @@ class UserAPI {
     return isRegister;
   }
 
-  // Future<bool> login(String username, password) async {
-  //   bool isLogin = false;
-  //   try {
-  //     var url = baseUrl + loginUrl;
-  //     var dio = HttpServices().getDioInstance();
+  Future<bool> login(String username, password) async {
+    bool isLogin = false;
+    try {
+      var url = baseUrl + loginUrl;
+      var dio = HttpServices().getDioInstance();
 
-  //     var response = await dio.post(url, data: {
-  //       "username": username,
-  //       "password": password,
-  //     });
-  //     if (response.statusCode == 201) {
-  //       LoginResponse loginResponse = LoginResponse.fromJson(response.data);
-  //       token = loginResponse.token;
-  //       _setDataToSharedPref(token!);
-  //       if (token == null) {
-  //         isLogin = false;
-  //       } else {
-  //         isLogin = true;
-  //       }
-  //     }
-  //   } catch (e) {
-  //     debugPrint(e.toString());
-  //   }
-  //   return isLogin;
-  // }
+      var response = await dio.post(url, data: {
+        "username": username,
+        "password": password,
+      });
+      if (response.statusCode == 201) {
+        LoginResponse loginResponse = LoginResponse.fromJson(response.data);
+        token = loginResponse.token;
+        _setDataToSharedPref(token!);
+        if (token == null) {
+          isLogin = false;
+        } else {
+          isLogin = true;
+        }
+      }
+    } catch (e) {
+      debugPrint(e.toString());
+    }
+    return isLogin;
+  }
 
   _setDataToSharedPref(String text) async {
     try {

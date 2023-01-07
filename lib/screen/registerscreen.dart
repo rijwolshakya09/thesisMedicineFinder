@@ -25,7 +25,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
   final _formKey = GlobalKey<FormState>();
 
-  final _fullnameController = TextEditingController();
+  // final _fullnameController = TextEditingController();
   final _contactnoController = TextEditingController();
   final _usernameController = TextEditingController();
   final _emailController = TextEditingController();
@@ -36,6 +36,12 @@ class _RegisterScreenState extends State<RegisterScreen> {
   _registerUser(User user) async {
     bool isRegister = await UserRepository().registerUser(user);
     if (isRegister) {
+      setState(() {
+        Navigator.pushNamed(
+          context,
+          '/login',
+        );
+      });
       _displayMessage(true);
     } else {
       _displayMessage(false);

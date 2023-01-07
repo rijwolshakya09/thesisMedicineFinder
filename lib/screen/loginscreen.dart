@@ -4,6 +4,7 @@ import 'package:iconify_flutter/iconify_flutter.dart';
 import 'package:iconify_flutter/icons/ph.dart';
 import 'package:iconify_flutter/icons/ri.dart';
 import 'package:iconify_flutter/icons/simple_icons.dart';
+import 'package:medicine_finder/repository/user_repository.dart';
 import 'package:motion_toast/motion_toast.dart';
 
 import '../model/customappbarlogin.dart';
@@ -47,35 +48,35 @@ class _LoginScreenState extends State<LoginScreen> {
     }
   }
 
-  // _login() async {
-  //   try {
-  //     CustomerRepository userRepository = CustomerRepository();
-  //     bool isLogin = await userRepository.login(
-  //       _usernameController.text,
-  //       _passwordController.text,
-  //     );
-  //     if (isLogin) {
-  //       AwesomeNotifications().createNotification(
-  //         content: NotificationContent(s
-  //           id: counter,
-  //           channelKey: 'basic_channel',
-  //           title: 'Login Success',
-  //           body: 'Welcome To Guitar Shop',
-  //         ),
-  //       );
-  //       setState(() {
-  //         counter++;
-  //       });
-  //       _navigatorToScreen(true);
-  //     } else {
-  //       _navigatorToScreen(false);
-  //     }
-  //   } catch (e) {
-  //     MotionToast.error(
-  //       description: Text("Error: ${e.toString()}"),
-  //     ).show(context);
-  //   }
-  // }
+  _login() async {
+    try {
+      UserRepository userRepository = UserRepository();
+      bool isLogin = await userRepository.login(
+        _usernameController.text,
+        _passwordController.text,
+      );
+      if (isLogin) {
+        AwesomeNotifications().createNotification(
+          content: NotificationContent(
+            id: counter,
+            channelKey: 'basic_channel',
+            title: 'Login Success',
+            body: 'Welcome To MedFind',
+          ),
+        );
+        setState(() {
+          counter++;
+        });
+        _navigatorToScreen(true);
+      } else {
+        _navigatorToScreen(false);
+      }
+    } catch (e) {
+      MotionToast.error(
+        description: Text("Error: ${e.toString()}"),
+      ).show(context);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -259,7 +260,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           onPressed: () {
                             setState(() {
                               if (_formKey.currentState!.validate()) {
-                                // _login();
+                                _login();
                               }
                             });
                           },

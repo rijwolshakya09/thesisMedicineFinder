@@ -6,11 +6,10 @@ import 'package:iconify_flutter/icons/mingcute.dart';
 import 'package:iconify_flutter/icons/ri.dart';
 import 'package:iconify_flutter/icons/simple_icons.dart';
 import 'package:medicine_finder/model/customappbarlogin.dart';
-import 'package:medicine_finder/screen/loginscreen.dart';
+import 'package:medicine_finder/screen/homescreen.dart';
 import 'package:iconify_flutter/iconify_flutter.dart';
 import 'package:iconify_flutter/icons/majesticons.dart';
 import 'package:iconify_flutter/icons/ph.dart';
-import 'package:medicine_finder/screen/registerscreen.dart';
 
 // import '../model/customappbarlogin.dart';
 
@@ -25,9 +24,9 @@ class _LayoutScreenState extends State<LayoutScreen> {
   int _selectedIndex = 0;
 
   List<Widget> lstWidget = [
-    const LoginScreen(),
-    const RegisterScreen(),
-    const LoginScreen(),
+    const HomeScreen(),
+    const HomeScreen(),
+    const HomeScreen(),
   ];
 
   // _removeDataFromSharedPref() async {
