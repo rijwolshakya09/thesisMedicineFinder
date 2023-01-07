@@ -101,7 +101,7 @@ class _LayoutScreenState extends State<LayoutScreen> {
         title: Padding(
           padding: const EdgeInsets.fromLTRB(0, 0, 0, 10),
           child: Image.asset(
-            'assets/images/logo.png',
+            'assets/images/logo2.png',
             width: 120,
             fit: BoxFit.fill,
           ),

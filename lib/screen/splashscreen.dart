@@ -2,7 +2,6 @@ import 'dart:async';
 import 'dart:math';
 
 import 'package:flutter/material.dart';
-import 'package:medicine_finder/components/layout.dart';
 import 'package:medicine_finder/screen/loginscreen.dart';
 
 class SplashScreen extends StatefulWidget {
@@ -29,7 +28,7 @@ class _SplashScreenState extends State<SplashScreen>
                   Navigator.pushReplacement(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => const LayoutScreen(),
+                      builder: (context) => const LoginScreen(),
                     ),
                   ),
                 }
@@ -38,7 +37,7 @@ class _SplashScreenState extends State<SplashScreen>
                   Navigator.pushReplacement(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => const LayoutScreen(),
+                      builder: (context) => const LoginScreen(),
                     ),
                   ),
                 }
@@ -107,7 +106,7 @@ class _SplashScreenState extends State<SplashScreen>
               children: [
                 AnimatedBuilder(
                   animation: _controller!,
-                  child: Image.asset('assets/images/logo.png'),
+                  child: Image.asset('assets/images/logo2.png'),
                   builder: (context, child) {
                     return Transform.rotate(
                       angle: _controller!.value * 2.0 * pi,
@@ -116,10 +115,10 @@ class _SplashScreenState extends State<SplashScreen>
                   },
                 ),
                 const SizedBox(
-                  height: 8,
+                  height: 12,
                 ),
                 const Text(
-                  "Medicine Finder",
+                  "MedFind",
                   style: TextStyle(
                     color: Colors.white,
                     fontWeight: FontWeight.bold,
