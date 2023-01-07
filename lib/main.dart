@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:medicine_finder/components/layout.dart';
 import 'package:medicine_finder/screen/loginscreen.dart';
+import 'package:medicine_finder/screen/registerscreen.dart';
 import 'package:medicine_finder/screen/splashscreen.dart';
 
 void main() {
@@ -11,6 +12,7 @@ void main() {
       '/': (context) => const SplashScreen(),
       '/layout': (context) => const LayoutScreen(),
       '/login': (context) => const LoginScreen(),
+      '/register': (context) => const RegisterScreen(),
     },
   ));
 }
