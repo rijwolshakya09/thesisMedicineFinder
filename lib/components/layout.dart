@@ -10,6 +10,7 @@ import 'package:medicine_finder/screen/homescreen.dart';
 import 'package:iconify_flutter/iconify_flutter.dart';
 import 'package:iconify_flutter/icons/majesticons.dart';
 import 'package:iconify_flutter/icons/ph.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 // import '../model/customappbarlogin.dart';
 
@@ -29,21 +30,21 @@ class _LayoutScreenState extends State<LayoutScreen> {
     const HomeScreen(),
   ];
 
-  // _removeDataFromSharedPref() async {
-  //   try {
-  //     final SharedPreferences prefs = await SharedPreferences.getInstance();
-  //     prefs.remove("token");
-  //   } catch (e) {
-  //     debugPrint(e.toString());
-  //   }
-  // }
+  _removeDataFromSharedPref() async {
+    try {
+      final SharedPreferences prefs = await SharedPreferences.getInstance();
+      prefs.remove("token");
+    } catch (e) {
+      debugPrint(e.toString());
+    }
+  }
 
-  // _logoutUser() {
-  //   setState(() {
-  //     _removeDataFromSharedPref();
-  //     Navigator.pushNamed(context, '/login');
-  //   });
-  // }
+  _logoutUser() {
+    setState(() {
+      _removeDataFromSharedPref();
+      Navigator.pushNamed(context, '/login');
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -342,8 +343,8 @@ class _LayoutScreenState extends State<LayoutScreen> {
                     ),
                     onTap: () {
                       setState(() {
-                        // _logoutUser();
-                        // Navigator.pushNamed(context, "/login");
+                        _logoutUser();
+                        Navigator.pushNamed(context, "/login");
                       });
                     },
                   ),

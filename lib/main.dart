@@ -7,7 +7,7 @@ import 'package:medicine_finder/screen/splashscreen.dart';
 
 void main() {
   AwesomeNotifications().initialize(
-    'resource://drawable/launcher',
+    'resource://drawable/ic_applogo',
     [
       NotificationChannel(
         channelGroupKey: 'basic_channel_group',

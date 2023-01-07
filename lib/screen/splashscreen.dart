@@ -2,7 +2,10 @@ import 'dart:async';
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:medicine_finder/components/layout.dart';
 import 'package:medicine_finder/screen/loginscreen.dart';
+import 'package:medicine_finder/utils/url.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({Key? key}) : super(key: key);
@@ -18,6 +21,7 @@ class _SplashScreenState extends State<SplashScreen>
 
   @override
   void initState() {
+    _getDataFromSharedPref();
     super.initState();
     startAnimation();
     Timer(
@@ -37,7 +41,7 @@ class _SplashScreenState extends State<SplashScreen>
                   Navigator.pushReplacement(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => const LoginScreen(),
+                      builder: (context) => const LayoutScreen(),
                     ),
                   ),
                 }
@@ -64,23 +68,23 @@ class _SplashScreenState extends State<SplashScreen>
 
   String data = '';
 
-  // _getDataFromSharedPref() async {
-  //   final SharedPreferences prefs = await SharedPreferences.getInstance();
-  //   final String? value = prefs.getString("token");
-  //   token = value;
+  _getDataFromSharedPref() async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    final String? value = prefs.getString("token");
+    token = value;
 
-  //   if (value != null) {
-  //     setState(() {
-  //       isLoggedIn = true;
-  //       data = value;
-  //     });
-  //   } else {
-  //     setState(() {
-  //       isLoggedIn = false;
-  //       data = "No Data Found";
-  //     });
-  //   }
-  // }
+    if (value != null) {
+      setState(() {
+        isLoggedIn = true;
+        data = value;
+      });
+    } else {
+      setState(() {
+        isLoggedIn = false;
+        data = "No Data Found";
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
