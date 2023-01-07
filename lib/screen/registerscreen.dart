@@ -6,6 +6,9 @@ import 'package:iconify_flutter/icons/ic.dart';
 import 'package:iconify_flutter/icons/ph.dart';
 import 'package:iconify_flutter/icons/ri.dart';
 import 'package:iconify_flutter/icons/simple_icons.dart';
+import 'package:medicine_finder/model/user.dart';
+import 'package:medicine_finder/repository/user_repository.dart';
+import 'package:medicine_finder/utils/show_message.dart';
 
 import '../model/customappbarlogin.dart';
 // import '../utils/show_message.dart';
@@ -30,52 +33,22 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
   bool? isChecked = false;
 
-  // _registerUser(Customer customer) async {
-  //   bool isRegister = await CustomerRepository().registerUser(customer);
-  //   if (isRegister) {
-  //     _displayMessage(true);
-  //   } else {
-  //     _displayMessage(false);
-  //   }
-  // }
+  _registerUser(User user) async {
+    bool isRegister = await UserRepository().registerUser(user);
+    if (isRegister) {
+      _displayMessage(true);
+    } else {
+      _displayMessage(false);
+    }
+  }
 
-  // _displayMessage(bool isRegister) {
-  //   if (isRegister) {
-  //     displaySuccessMessage(context, "Register Success");
-  //   } else {
-  //     displayErrorMessage(context, "Register Failed");
-  //   }
-  // }
-
-  // Future<void> requestCameraPermission() async {
-  //   final cameraStatus = await Permission.camera.status;
-  //   if (cameraStatus.isDenied) {
-  //     await Permission.camera.request();
-  //   }
-  // }
-
-  // Future<void> requestGalleryPermission() async {
-  //   final galleryStatus = await Permission.photos.status;
-  //   if (galleryStatus.isDenied) {
-  //     await Permission.photos.request();
-  //   }
-  // }
-
-  // File? img;
-  // Future _loadImage(ImageSource imageSource) async {
-  //   try {
-  //     final image = await ImagePicker().pickImage(source: imageSource);
-  //     if (image != null) {
-  //       setState(() {
-  //         img = File(image.path);
-  //       });
-  //     } else {
-  //       return;
-  //     }
-  //   } catch (e) {
-  //     debugPrint('Failed to pick Image $e');
-  //   }
-  // }
+  _displayMessage(bool isRegister) {
+    if (isRegister) {
+      displaySuccessMessage(context, "Register Success");
+    } else {
+      displayErrorMessage(context, "Register Failed");
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -130,80 +103,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   key: _formKey,
                   child: Column(
                     children: [
-                      // GestureDetector(
-                      //   child: SizedBox(
-                      //     height: 100,
-                      //     child: CircleAvatar(
-                      //       radius: 60,
-                      //       child: ClipOval(
-                      //         child: Image.network(
-                      //           'https://w7.pngwing.com/pngs/627/693/png-transparent-computer-icons-user-user-icon-thumbnail.png',
-                      //           fit: BoxFit.cover,
-                      //           height:
-                      //               MediaQuery.of(context).size.height * 0.4,
-                      //         ),
-                      //       ),
-                      //     ),
-                      //   ),
-                      //   onTap: () {
-                      //     setState(() {
-                      //       showModalBottomSheet(
-                      //           context: context,
-                      //           builder: (BuildContext context) {
-                      //             return selectImage();
-                      //           });
-                      //     });
-                      //   },
-                      // ),
-                      // const SizedBox(
-                      //   height: 8,
-                      // ),
-                      //=============================FulName Text Field==============================
-                      Container(
-                        padding: const EdgeInsets.fromLTRB(8, 0, 0, 0),
-                        width: double.infinity,
-                        height: 50,
-                        decoration: BoxDecoration(
-                          border: Border.all(
-                            color: const Color(0xFF6BB3ED),
-                            width: 2,
-                          ),
-                          borderRadius: BorderRadius.circular(10),
-                          // color: const Color(0xFF6BB3ED),
-                        ),
-                        alignment: Alignment.center,
-                        child: TextFormField(
-                          key: const ValueKey("full_name"),
-                          controller: _fullnameController,
-                          cursorColor: const Color(0xFF6BB3ED),
-                          style: const TextStyle(
-                            color: Color(0xFF6BB3ED),
-                            fontFamily: 'Merienda',
-                          ),
-                          keyboardType: TextInputType.text,
-                          decoration: const InputDecoration(
-                            icon: Iconify(
-                              Ri.user_4_fill,
-                              color: Color(0xFF6BB3ED),
-                              size: 30,
-                            ),
-                            // labelText: 'Full Name',
-                            // labelStyle: TextStyle(fontSize: 18),
-                            hintText: 'Full Name',
-                            enabledBorder: InputBorder.none,
-                            focusedBorder: InputBorder.none,
-                          ),
-                          validator: (value) {
-                            if (value!.isEmpty) {
-                              return 'Please Enter Your Full Name';
-                            }
-                            return null;
-                          },
-                        ),
-                      ),
-
-                      // //=============================Address Text Field==============================
-                      // const SizedBox(height: 8),
+                      // //=============================FulName Text Field==============================
                       // Container(
                       //   padding: const EdgeInsets.fromLTRB(8, 0, 0, 0),
                       //   width: double.infinity,
@@ -218,130 +118,34 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       //   ),
                       //   alignment: Alignment.center,
                       //   child: TextFormField(
+                      //     key: const ValueKey("full_name"),
+                      //     controller: _fullnameController,
                       //     cursorColor: const Color(0xFF6BB3ED),
                       //     style: const TextStyle(
                       //       color: Color(0xFF6BB3ED),
                       //       fontFamily: 'Merienda',
                       //     ),
-                      //     onChanged: (value) {
-                      //       setState(() {
-                      //         address = value;
-                      //       });
-                      //     },
                       //     keyboardType: TextInputType.text,
                       //     decoration: const InputDecoration(
                       //       icon: Iconify(
-                      //         Ph.address_book_fill,
+                      //         Ri.user_4_fill,
                       //         color: Color(0xFF6BB3ED),
                       //         size: 30,
                       //       ),
                       //       // labelText: 'Full Name',
                       //       // labelStyle: TextStyle(fontSize: 18),
-                      //       hintText: 'Address',
+                      //       hintText: 'Full Name',
                       //       enabledBorder: InputBorder.none,
                       //       focusedBorder: InputBorder.none,
                       //     ),
                       //     validator: (value) {
                       //       if (value!.isEmpty) {
-                      //         return 'Please Enter Your Address';
+                      //         return 'Please Enter Your Full Name';
                       //       }
                       //       return null;
                       //     },
                       //   ),
                       // ),
-
-                      //=============================Contact Text Field==============================
-                      const SizedBox(height: 12),
-                      Container(
-                        padding: const EdgeInsets.fromLTRB(8, 0, 0, 0),
-                        width: double.infinity,
-                        height: 50,
-                        decoration: BoxDecoration(
-                          border: Border.all(
-                            color: const Color(0xFF6BB3ED),
-                            width: 2,
-                          ),
-                          borderRadius: BorderRadius.circular(10),
-                          // color: const Color(0xFF6BB3ED),
-                        ),
-                        alignment: Alignment.center,
-                        child: TextFormField(
-                          key: const ValueKey("contact_no"),
-                          controller: _contactnoController,
-                          cursorColor: const Color(0xFF6BB3ED),
-                          style: const TextStyle(
-                            color: Color(0xFF6BB3ED),
-                            fontFamily: 'Merienda',
-                          ),
-                          keyboardType: TextInputType.text,
-                          decoration: const InputDecoration(
-                            icon: Iconify(
-                              Ic.baseline_call,
-                              color: Color(0xFF6BB3ED),
-                              size: 30,
-                            ),
-                            // labelText: 'Full Name',
-                            // labelStyle: TextStyle(fontSize: 18),
-                            hintText: 'Contact No.',
-                            enabledBorder: InputBorder.none,
-                            focusedBorder: InputBorder.none,
-                          ),
-                          validator: (value) {
-                            if (value!.isEmpty) {
-                              return 'Please Enter Your Contact No.';
-                            }
-                            return null;
-                          },
-                        ),
-                      ),
-
-                      // //=============================Gender Field==============================
-                      //                     const SizedBox(height: 4),
-                      //                     Container(
-                      //                       padding: const EdgeInsets.fromLTRB(8, 0, 0, 0),
-                      //                       width: double.infinity,
-                      //                       height: 50,
-                      //                       decoration: BoxDecoration(
-                      //                         border: Border.all(
-                      //                           color: const Color(0xFF6BB3ED),
-                      //                           width: 2,
-                      //                         ),
-                      //                         borderRadius: BorderRadius.circular(10),
-                      //                         // color: const Color(0xFF6BB3ED),
-                      //                       ),
-                      //                       alignment: Alignment.center,
-                      //                       child: TextFormField(
-                      //                         cursorColor: const Color(0xFF6BB3ED),
-                      //                         style: const TextStyle(
-                      //                           color: Color(0xFF6BB3ED),
-                      //                           fontFamily: 'Merienda',
-                      //                         ),
-                      //                         onChanged: (value) {
-                      //                           setState(() {
-                      //                             username = value;
-                      //                           });
-                      //                         },
-                      //                         keyboardType: TextInputType.text,
-                      //                         decoration: const InputDecoration(
-                      //                           icon: Iconify(
-                      //                             Mdi.gender_male_female,
-                      //                             color: Color(0xFF6BB3ED),
-                      //                             size: 30,
-                      //                           ),
-                      //                           // labelText: 'Username',
-                      //                           hintText: 'Gender',
-                      //                           // labelStyle: TextStyle(fontSize: 18),
-                      //                           enabledBorder: InputBorder.none,
-                      //                           focusedBorder: InputBorder.none,
-                      //                         ),
-                      //                         validator: (value) {
-                      //                           if (value!.isEmpty) {
-                      //                             return 'Please Enter Your Gender';
-                      //                           }
-                      //                           return null;
-                      //                         },
-                      //                       ),
-                      //                     ),
 
                       //=============================Username Text Field==============================
                       const SizedBox(height: 12),
@@ -382,6 +186,51 @@ class _RegisterScreenState extends State<RegisterScreen> {
                           validator: (value) {
                             if (value!.isEmpty) {
                               return 'Please Enter Your Username';
+                            }
+                            return null;
+                          },
+                        ),
+                      ),
+
+                      //=============================Contact Text Field==============================
+                      const SizedBox(height: 12),
+                      Container(
+                        padding: const EdgeInsets.fromLTRB(8, 0, 0, 0),
+                        width: double.infinity,
+                        height: 50,
+                        decoration: BoxDecoration(
+                          border: Border.all(
+                            color: const Color(0xFF6BB3ED),
+                            width: 2,
+                          ),
+                          borderRadius: BorderRadius.circular(10),
+                          // color: const Color(0xFF6BB3ED),
+                        ),
+                        alignment: Alignment.center,
+                        child: TextFormField(
+                          key: const ValueKey("contact_no"),
+                          controller: _contactnoController,
+                          cursorColor: const Color(0xFF6BB3ED),
+                          style: const TextStyle(
+                            color: Color(0xFF6BB3ED),
+                            fontFamily: 'Merienda',
+                          ),
+                          keyboardType: TextInputType.text,
+                          decoration: const InputDecoration(
+                            icon: Iconify(
+                              Ic.baseline_call,
+                              color: Color(0xFF6BB3ED),
+                              size: 30,
+                            ),
+                            // labelText: 'Full Name',
+                            // labelStyle: TextStyle(fontSize: 18),
+                            hintText: 'Contact No.',
+                            enabledBorder: InputBorder.none,
+                            focusedBorder: InputBorder.none,
+                          ),
+                          validator: (value) {
+                            if (value!.isEmpty) {
+                              return 'Please Enter Your Contact No.';
                             }
                             return null;
                           },
@@ -478,48 +327,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
                           },
                         ),
                       ),
-                      // //=================================Terms & Condition==============================
-                      // Container(
-                      //   margin: const EdgeInsets.only(top: 0),
-                      //   // alignment: Alignment.centerRight,
-                      //   child: Row(
-                      //     children: [
-                      //       Checkbox(
-                      //         shape: const RoundedRectangleBorder(
-                      //           borderRadius: BorderRadius.all(
-                      //             Radius.circular(10.0),
-                      //           ),
-                      //         ),
-                      //         value: isChecked,
-                      //         onChanged: (v) {
-                      //           setState(() {
-                      //             isChecked = v!;
-                      //           });
-                      //         },
-                      //       ),
-                      //       const Text(
-                      //         "I Accept All The Terms & Conditions.",
-                      //         style: TextStyle(
-                      //           // color: Colors.grey,
-                      //           fontWeight: FontWeight.bold,
-                      //           fontFamily: 'Merienda',
-                      //         ),
-                      //       ),
-                      //     ],
-                      //   ),
-                      //   // child: GestureDetector(
-                      //   //   child: const Text(
-                      //   //     "Forget Password?",
-                      //   //     style: TextStyle(
-                      //   //       color: Color(0xFF6BB3ED),
-                      //   //       fontWeight: FontWeight.bold,
-                      //   //       fontFamily: 'Merienda',
-                      //   //     ),
-                      //   //   ),
-                      //   //   onTap: () {},
-                      //   // ),
-                      // ),
-
                       //=================================SignUp Button=================================
                       const SizedBox(
                         height: 8,
@@ -539,14 +346,13 @@ class _RegisterScreenState extends State<RegisterScreen> {
                           onPressed: () {
                             setState(() {
                               if (_formKey.currentState!.validate()) {
-                                //   Customer customer = Customer(
-                                //     full_name: _fullnameController.text,
-                                //     contact_no: _contactnoController.text,
-                                //     username: _usernameController.text,
-                                //     email: _emailController.text,
-                                //     password: _passwordController.text,
-                                //   );
-                                //   _registerUser(customer);
+                                User user = User(
+                                  username: _usernameController.text,
+                                  contact_no: _contactnoController.text,
+                                  email: _emailController.text,
+                                  password: _passwordController.text,
+                                );
+                                _registerUser(user);
                               }
                             });
                           },
