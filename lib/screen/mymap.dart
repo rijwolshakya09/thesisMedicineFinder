@@ -15,12 +15,6 @@ class MyMapScreen extends StatefulWidget {
 class _MyMapScreenState extends State<MyMapScreen> {
   GoogleMapController? mapController;
 
-  final LatLng _center = const LatLng(45.521563, -122.677433);
-
-  void _onMapCreated(GoogleMapController controller) {
-    mapController = controller;
-  }
-
   Set<Marker> markers = {};
   LatLng myLocation = const LatLng(27.7047139, 85.3295421);
   LatLng myLocation1 = const LatLng(-7.247483, -55.108848);
@@ -59,33 +53,6 @@ class _MyMapScreenState extends State<MyMapScreen> {
 
   final Completer<GoogleMapController> _controller =
       Completer<GoogleMapController>();
-
-  static const CameraPosition _kGooglePlex = CameraPosition(
-    target: LatLng(37.42796133580664, -122.085749655962),
-    zoom: 14.4746,
-  );
-
-  static const CameraPosition _kLake = CameraPosition(
-      bearing: 192.8334901395799,
-      target: LatLng(37.43296265331129, -122.08832357078792),
-      tilt: 59.440717697143555,
-      zoom: 19.151926040649414);
-
-  // Location location = Location();
-
-  // Future<bool> _checkPermission() async {
-  //   final permission = await location.hasPermission();
-  //   if (permission == PermissionStatus.granted) {
-  //     return true;
-  //   } else {
-  //     final permissionRequest = await location.requestPermission();
-  //     if (permissionRequest == PermissionStatus.granted) {
-  //       return true;
-  //     } else {
-  //       return false;
-  //     }
-  //   }
-  // }
 
   void getLocation() async {
     Position? currentPosition = await Geolocator.getCurrentPosition(
