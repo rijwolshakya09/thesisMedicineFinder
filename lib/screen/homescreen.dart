@@ -1,4 +1,4 @@
-import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -10,8 +10,23 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
-    return Container(
-      child: const Text("Home Screen"),
+    return SafeArea(
+      child: Scaffold(
+        body: Center(
+          child: Column(
+            children: [
+              Container(
+                child: const Text("Home Screen"),
+              ),
+              ElevatedButton(
+                  onPressed: () {
+                    Navigator.popAndPushNamed(context, '/mymap');
+                  },
+                  child: const Text("Open Map"))
+            ],
+          ),
+        ),
+      ),
     );
   }
 }
