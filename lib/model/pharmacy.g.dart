@@ -6,20 +6,22 @@ part of 'pharmacy.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-Pharmacy _$PharmacyFromJson(Map<String, dynamic> json) => Pharmacy(
-      id: json['_id'] as String?,
-      first_name: json['first_name'] as String?,
-      last_name: json['last_name'] as String?,
-      pharmacy_name: json['pharmacy_name'] as String?,
-      description: json['description'] as String?,
-      address: json['address'] as String?,
-      lat: (json['lat'] as num?)?.toDouble(),
-      lng: (json['lng'] as num?)?.toDouble(),
-      contact_no: json['contact_no'] as String?,
-      profile_pic: json['profile_pic'] as String?,
-      pharmacy_pic: json['pharmacy_pic'] as String?,
-      email: json['email'] as String?,
-    );
+Pharmacy _$PharmacyFromJson(Map<String, dynamic> json) {
+  return Pharmacy(
+    id: json['_id'] as String?,
+    first_name: json['first_name'] as String?,
+    last_name: json['last_name'] as String?,
+    pharmacy_name: json['pharmacy_name'] as String?,
+    description: json['description'] as String?,
+    address: json['address'] as String?,
+    lat: (json['lat'] as num?)?.toDouble(),
+    lng: (json['lng'] as num?)?.toDouble(),
+    contact_no: json['contact_no'] as String?,
+    profile_pic: json['profile_pic'] as String?,
+    pharmacy_pic: json['pharmacy_pic'] as String?,
+    email: json['email'] as String?,
+  );
+}
 
 Map<String, dynamic> _$PharmacyToJson(Pharmacy instance) => <String, dynamic>{
       '_id': instance.id,

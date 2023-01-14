@@ -16,90 +16,88 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
-        body: Center(
-          child: SingleChildScrollView(
-            child: Padding(
-              padding: const EdgeInsets.fromLTRB(18, 0, 18, 0),
-              child: Column(
-                children: [
-                  const Text("Home Screen"),
-                  ElevatedButton(
-                    onPressed: () {
-                      Navigator.popAndPushNamed(context, '/mymap');
-                    },
-                    child: const Text("Open Map"),
+        body: SingleChildScrollView(
+          child: Padding(
+            padding: const EdgeInsets.fromLTRB(18, 0, 18, 0),
+            child: Column(
+              children: [
+                const Text("Home Screen"),
+                ElevatedButton(
+                  onPressed: () {
+                    Navigator.popAndPushNamed(context, '/mymap');
+                  },
+                  child: const Text("Open Map"),
+                ),
+                const Text(
+                  "Categories",
+                  style: TextStyle(
+                    color: Color(0xFF535699),
+                    fontWeight: FontWeight.bold,
+                    fontSize: 20,
+                    fontFamily: 'Merienda',
                   ),
-                  const Text(
-                    "Categories",
-                    style: TextStyle(
-                      color: Color(0xFF535699),
-                      fontWeight: FontWeight.bold,
-                      fontSize: 20,
-                      fontFamily: 'Merienda',
-                    ),
-                  ),
-                  const SizedBox(height: 12),
-                  Row(
-                    children: [
-                      Expanded(
-                        child: SizedBox(
-                          height: 100,
-                          child: FutureBuilder<PharmacyResponse?>(
-                            future: PharmacyRepository().getPharmacy(),
-                            builder: (context, snapshot) {
-                              if (snapshot.connectionState ==
-                                  ConnectionState.done) {
-                                if (snapshot.data != null) {
-                                  // ProductResponse productResponse = snapshot.data!;
-                                  List<Pharmacy> pharmacyList =
-                                      snapshot.data!.data!;
-                                  return ListView.builder(
-                                    shrinkWrap: true,
-                                    scrollDirection: Axis.horizontal,
-                                    itemCount: snapshot.data!.data!.length,
-                                    itemBuilder:
-                                        (BuildContext context, int index) {
-                                      return GestureDetector(
-                                        onTap: () {
-                                          setState(() {
-                                            Navigator.pushNamed(
-                                                context, '/profile');
-                                          });
-                                        },
-                                        child: pharmacy(
-                                          pharmacyList[index],
-                                        ),
-                                      );
-                                    },
-                                  );
-                                } else {
-                                  return const Center(
-                                    child: Text("No data"),
-                                  );
-                                }
-                              } else if (snapshot.connectionState ==
-                                  ConnectionState.waiting) {
-                                return const Center(
-                                  child: CircularProgressIndicator(),
+                ),
+                const SizedBox(height: 12),
+                Row(
+                  children: [
+                    Expanded(
+                      child: SizedBox(
+                        height: 100,
+                        child: FutureBuilder<PharmacyResponse?>(
+                          future: PharmacyRepository().getPharmacy(),
+                          builder: (context, snapshot) {
+                            if (snapshot.connectionState ==
+                                ConnectionState.done) {
+                              if (snapshot.data != null) {
+                                // ProductResponse productResponse = snapshot.data!;
+                                List<Pharmacy> pharmacyList =
+                                    snapshot.data!.data!;
+                                return ListView.builder(
+                                  shrinkWrap: true,
+                                  scrollDirection: Axis.horizontal,
+                                  itemCount: snapshot.data!.data!.length,
+                                  itemBuilder:
+                                      (BuildContext context, int index) {
+                                    return GestureDetector(
+                                      onTap: () {
+                                        setState(() {
+                                          Navigator.pushNamed(
+                                              context, '/profile');
+                                        });
+                                      },
+                                      child: pharmacy(
+                                        pharmacyList[index],
+                                      ),
+                                    );
+                                  },
                                 );
-                              } else if (snapshot.hasError) {
-                                return Text("${snapshot.error}");
                               } else {
                                 return const Center(
-                                  child: CircularProgressIndicator(
-                                    valueColor: AlwaysStoppedAnimation<Color>(
-                                        Colors.blue),
-                                  ),
+                                  child: Text("No data"),
                                 );
                               }
-                            },
-                          ),
+                            } else if (snapshot.connectionState ==
+                                ConnectionState.waiting) {
+                              return const Center(
+                                child: CircularProgressIndicator(),
+                              );
+                            } else if (snapshot.hasError) {
+                              return Text("${snapshot.error}");
+                            } else {
+                              return const Center(
+                                child: CircularProgressIndicator(
+                                  valueColor: AlwaysStoppedAnimation<Color>(
+                                      Colors.blue),
+                                ),
+                              );
+                            }
+                          },
                         ),
                       ),
-                    ],
-                  ),
-                ],
-              ),
+                    ),
+                  ],
+                ),
+              ],
             ),
           ),
         ),

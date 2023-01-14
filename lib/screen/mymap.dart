@@ -77,7 +77,7 @@ class _MyMapScreenState extends State<MyMapScreen> {
         mapType: MapType.normal,
         initialCameraPosition: CameraPosition(
           target: myLocation,
-          zoom: 10,
+          // zoom: 10,
         ),
         onMapCreated: (GoogleMapController controller) {
           _controller.complete(controller);
