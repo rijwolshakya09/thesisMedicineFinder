@@ -54,6 +54,7 @@ class PharmacyAPI {
         pharmacyUrl,
         options: buildCacheOptions(const Duration(days: 7)),
       );
+      debugPrint("........${response.data!}");
       if (response.statusCode == 201) {
         pharmacyResponse = PharmacyResponse.fromJson(response.data);
       } else {
