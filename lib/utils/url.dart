@@ -7,5 +7,6 @@ const medicineUrl = "medicine/all";
 const medicineByPharmacyUrl = "medicine/get/";
 const medicineBookUrl = "medicine/book";
 const bookedMedicineUrl = "medicine/booked";
+const bookedMedicineDelUrl = "bookmedicine/delete/";
 
 String? token;

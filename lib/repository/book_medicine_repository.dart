@@ -12,7 +12,7 @@ class BookedMedicineRepository {
         .bookMedicine(medicine, quantity, totalPrice, status);
   }
 
-  // Future<bool> deleteCart(String cartId) async {
-  //   return AddToCartAPI().deleteCart(cartId);
-  // }
+  Future<bool> deleteBookedMed(String bookMedId) async {
+    return BookMedicineAPI().deleteBookedMed(bookMedId);
+  }
 }

@@ -82,27 +82,27 @@ class BookMedicineAPI {
     return bookedMedicineResponseList;
   }
 
-  // Future<bool> deleteCart(String cartId) async {
-  //   bool isDeleted = false;
-  //   String url = baseUrl + deleteCartUrl;
-  //   Dio dio = HttpServices().getDioInstance();
+  Future<bool> deleteBookedMed(String bookMedId) async {
+    bool isDeleted = false;
+    String url = baseUrl + bookedMedicineDelUrl;
+    Dio dio = HttpServices().getDioInstance();
 
-  //   try {
-  //     SharedPreferences prefs = await SharedPreferences.getInstance();
-  //     String? token = prefs.getString("token");
-  //     Response response = await dio.delete(
-  //       url + cartId,
-  //       options: Options(
-  //         headers: {HttpHeaders.authorizationHeader: "Bearer $token"},
-  //       ),
-  //     );
-  //     // debugPrint(response.toString());
-  //     if (response.statusCode == 201) {
-  //       return true;
-  //     }
-  //   } catch (e) {
-  //     debugPrint("Error: ${e.toString()}");
-  //   }
-  //   return isDeleted;
-  // }
+    try {
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      String? token = prefs.getString("token");
+      Response response = await dio.delete(
+        url + bookMedId,
+        options: Options(
+          headers: {HttpHeaders.authorizationHeader: "Bearer $token"},
+        ),
+      );
+      // debugPrint(response.toString());
+      if (response.statusCode == 201) {
+        return true;
+      }
+    } catch (e) {
+      debugPrint("Error: ${e.toString()}");
+    }
+    return isDeleted;
+  }
 }
