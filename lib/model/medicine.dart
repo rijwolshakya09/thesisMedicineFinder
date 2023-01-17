@@ -15,6 +15,7 @@ class Medicine {
   Pharmacy? pharmacyId;
 
   Medicine({
+    this.id,
     this.medicine_name,
     this.medicine_price,
     this.medicine_image,

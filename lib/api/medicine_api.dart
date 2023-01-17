@@ -1,5 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:dio_http_cache/dio_http_cache.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:medicine_finder/response/medicine_response.dart';
 import 'package:medicine_finder/utils/url.dart';
 
@@ -19,7 +20,8 @@ class MedicineAPI {
         medicineUrl,
         options: buildCacheOptions(const Duration(days: 7)),
       );
-      if (response.statusCode == 201) {
+      debugPrint("MedicineAPI........${response.data!}");
+      if (response.statusCode == 200) {
         medicineResponse = MedicineResponse.fromJson(response.data);
       } else {
         medicineResponse = null;

@@ -8,6 +8,7 @@ part of 'medicine.dart';
 
 Medicine _$MedicineFromJson(Map<String, dynamic> json) {
   return Medicine(
+    id: json['_id'] as String?,
     medicine_name: json['medicine_name'] as String?,
     medicine_price: json['medicine_price'] as String?,
     medicine_image: json['medicine_image'] as String?,
@@ -16,7 +17,7 @@ Medicine _$MedicineFromJson(Map<String, dynamic> json) {
     pharmacyId: json['pharmacyId'] == null
         ? null
         : Pharmacy.fromJson(json['pharmacyId'] as Map<String, dynamic>),
-  )..id = json['_id'] as String?;
+  );
 }
 
 Map<String, dynamic> _$MedicineToJson(Medicine instance) => <String, dynamic>{

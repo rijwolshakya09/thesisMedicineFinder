@@ -3,6 +3,9 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:medicine_finder/components/search_bar.dart';
+import 'package:medicine_finder/repository/medicine_repository.dart';
+import 'package:medicine_finder/response/medicine_response.dart';
 // import 'package:location/location.dart';
 
 class MyMapScreen extends StatefulWidget {
@@ -15,40 +18,25 @@ class MyMapScreen extends StatefulWidget {
 class _MyMapScreenState extends State<MyMapScreen> {
   GoogleMapController? mapController;
 
-  Set<Marker> markers = {};
+  final Set<Marker> _markers = {};
   LatLng myLocation = const LatLng(27.7047139, 85.3295421);
-  LatLng myLocation1 = const LatLng(-7.247483, -55.108848);
+
+  BitmapDescriptor? markerImage;
 
   @override
   void initState() {
     getLocation();
-    // markers.add(
-    //   Marker(
-    //     markerId: MarkerId(
-    //       myLocation.toString(),
-    //     ),
-    //     position: myLocation,
-    //     infoWindow: const InfoWindow(
-    //       title: "Guitar Shop",
-    //       snippet: "Shop",
-    //     ),
-    //     icon: BitmapDescriptor.defaultMarker,
-    //   ),
-    // );
-    // markers.add(
-    //   Marker(
-    //     markerId: MarkerId(
-    //       myLocation1.toString(),
-    //     ),
-    //     position: myLocation1,
-    //     infoWindow: const InfoWindow(
-    //       title: "Brazil Branch",
-    //       snippet: "Guitar Shop",
-    //     ),
-    //     icon: BitmapDescriptor.defaultMarker,
-    //   ),
-    // );
+    markericon();
     super.initState();
+  }
+
+  void markericon() async {
+    BitmapDescriptor? markerImage1 = await BitmapDescriptor.fromAssetImage(
+        const ImageConfiguration(size: Size(50, 50)),
+        'assets/images/locationmain.png');
+    setState(() {
+      markerImage = markerImage1;
+    });
   }
 
   final Completer<GoogleMapController> _controller =
@@ -67,26 +55,88 @@ class _MyMapScreenState extends State<MyMapScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      // appBar: AppBar(
-      //   leading: IconButton(
-      //       icon: const Icon(Icons.arrow_back_ios),
-      //       onPressed: () => Navigator.popAndPushNamed(context, "/layout")),
-      // ),
-      body: GoogleMap(
-        mapType: MapType.normal,
-        initialCameraPosition: CameraPosition(
-          target: myLocation,
-          // zoom: 10,
-        ),
-        onMapCreated: (GoogleMapController controller) {
-          _controller.complete(controller);
-        },
-        myLocationEnabled: true,
-        myLocationButtonEnabled: true,
-        // zoomControlsEnabled: false,
-        // zoomGesturesEnabled: false,
+    const outlineInputBorder = OutlineInputBorder(
+      borderRadius: BorderRadius.all(
+        Radius.circular(12),
       ),
+      borderSide: BorderSide.none,
     );
+    return Scaffold(
+      body: FutureBuilder<MedicineResponse?>(
+        future: MedicineRepository().getMedicines(),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.done) {
+            if (snapshot.data != null) {
+              // ProductResponse productResponse = snapshot.data!;
+              for (int i = 0; i < snapshot.data!.data!.length; i++) {
+                _markers.add(
+                  Marker(
+                    markerId: MarkerId(snapshot.data!.data![i].toString()),
+                    position: LatLng(snapshot.data!.data![i].pharmacyId!.lat!,
+                        snapshot.data!.data![i].pharmacyId!.lng!),
+                    infoWindow: InfoWindow(
+                      onTap: () {
+                        _showModalBottomSheet(context);
+                      },
+                      title: snapshot.data!.data![i].pharmacyId!.pharmacy_name!,
+                      snippet:
+                          'lat:${snapshot.data!.data![i].pharmacyId!.lat!} lng:${snapshot.data!.data![i].pharmacyId!.lng!}',
+                    ),
+                    icon: markerImage!,
+                  ),
+                );
+              }
+              return GoogleMap(
+                mapType: MapType.normal,
+                initialCameraPosition: CameraPosition(
+                  target: myLocation,
+                  // zoom: 10,
+                ),
+                onMapCreated: (GoogleMapController controller) {
+                  _controller.complete(controller);
+                },
+                markers: _markers,
+                myLocationEnabled: true,
+                myLocationButtonEnabled: true,
+              );
+            } else {
+              return const Center(
+                child: Text("No data"),
+              );
+            }
+          } else if (snapshot.connectionState == ConnectionState.waiting) {
+            return const Center(
+              child: CircularProgressIndicator(),
+            );
+          } else if (snapshot.hasError) {
+            return Text("${snapshot.error}");
+          } else {
+            return const Center(
+              child: CircularProgressIndicator(
+                valueColor: AlwaysStoppedAnimation<Color>(Colors.blue),
+              ),
+            );
+          }
+        },
+      ),
+      floatingActionButton: const Padding(
+        padding: EdgeInsets.fromLTRB(0, 8, 80, 0),
+        child: SizedBox(
+          height: 100,
+          child: SearchBar(outlineInputBorder: outlineInputBorder),
+        ),
+      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.startTop,
+    );
+  }
+
+  void _showModalBottomSheet(BuildContext context) {
+    showModalBottomSheet(
+        context: context,
+        builder: (builder) {
+          return Container(
+            child: const Text("Modal Bottom Sheet"),
+          );
+        });
   }
 }
