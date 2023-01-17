@@ -1,9 +1,10 @@
 import 'package:medicine_finder/api/medicine_book_api.dart';
+import 'package:medicine_finder/model/bookmed.dart';
 
 class BookedMedicineRepository {
-  // Future<List<AddToCart?>> getCart() async {
-  //   return AddToCartAPI().getCart();
-  // }
+  Future<List<BookMedicine?>> getBookedMedicine() async {
+    return BookMedicineAPI().getBookedMedicine();
+  }
 
   Future<bool> bookMedicine(
       medicine, int? quantity, int? totalPrice, String? status) async {

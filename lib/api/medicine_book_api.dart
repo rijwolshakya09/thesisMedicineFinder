@@ -1,7 +1,11 @@
 import 'dart:io';
 
 import 'package:dio/dio.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:medicine_finder/model/bookmed.dart';
+import 'package:medicine_finder/response/book_medicine_response.dart';
 import 'package:medicine_finder/utils/url.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import 'http_services.dart';
 
@@ -37,44 +41,46 @@ class BookMedicineAPI {
     return isAdded;
   }
 
-  // Future<List<BookMedicine?>> getBookedMedicine() async {
-  //   List<BookMedicine?> BookedMedicineResponseList = [];
-  //   Response response;
-  //   String? url = baseUrl + bookedMedicineUrl;
-  //   Dio dio = HttpServices().getDioInstance();
+  Future<List<BookMedicine?>> getBookedMedicine() async {
+    List<BookMedicine?> bookedMedicineResponseList = [];
+    Response response;
+    String? url = baseUrl + bookedMedicineUrl;
+    Dio dio = HttpServices().getDioInstance();
 
-  //   Future.delayed(const Duration(seconds: 2), () {});
-  //   AddToCartResponse? addToCartResponse;
-  //   debugPrint(token);
-  //   try {
-  //     SharedPreferences prefs = await SharedPreferences.getInstance();
-  //     String? token = prefs.getString("token");
-  //     response = await dio.get(
-  //       url,
-  //       options: Options(
-  //         headers: {HttpHeaders.authorizationHeader: "Bearer $token"},
-  //       ),
-  //     );
-  //     debugPrint(response.data!.toString());
-  //     if (response.statusCode == 201) {
-  //       addToCartResponse = AddToCartResponse.fromJson(response.data);
-  //       for (var data in addToCartResponse.data!) {
-  //         addToCartResponseList.add(AddToCart(
-  //           id: data.id,
-  //           guitar_id: data.guitar_id,
-  //           user_id: data.user_id,
-  //           quantity: data.quantity,
-  //         ));
-  //       }
-  //     } else {
-  //       addToCartResponse = null;
-  //     }
-  //   } catch (e) {
-  //     // throw Exception(e);
-  //     debugPrint("error$e");
-  //   }
-  //   return addToCartResponseList;
-  // }
+    Future.delayed(const Duration(seconds: 2), () {});
+    BookMedicineResponse? bookMedicineResponse;
+    debugPrint(token);
+    try {
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      String? token = prefs.getString("token");
+      response = await dio.get(
+        url,
+        options: Options(
+          headers: {HttpHeaders.authorizationHeader: "Bearer $token"},
+        ),
+      );
+      debugPrint(response.data!.toString());
+      if (response.statusCode == 200) {
+        bookMedicineResponse = BookMedicineResponse.fromJson(response.data);
+        for (var data in bookMedicineResponse.data!) {
+          bookedMedicineResponseList.add(BookMedicine(
+            id: data.id,
+            medicine: data.medicine,
+            userId: data.userId,
+            quantity: data.quantity,
+            total_price: data.total_price,
+            status: data.status,
+          ));
+        }
+      } else {
+        bookMedicineResponse = null;
+      }
+    } catch (e) {
+      // throw Exception(e);
+      debugPrint("error$e");
+    }
+    return bookedMedicineResponseList;
+  }
 
   // Future<bool> deleteCart(String cartId) async {
   //   bool isDeleted = false;
