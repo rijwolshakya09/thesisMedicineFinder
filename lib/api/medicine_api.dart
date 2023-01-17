@@ -32,21 +32,21 @@ class MedicineAPI {
     return medicineResponse;
   }
 
-  // Future<MedicineSingleResponse?> getSingleMedicine(productId) async {
-  //   Future.delayed(const Duration(seconds: 2), () {});
-  //   GuitarSingleResponse? guitarSingleResponse;
-  //   try {
-  //     var dio = HttpServices().getDioInstance();
-  //     Response response = await dio.get(guitarSingleUrl + productId);
-  //     if (response.statusCode == 201) {
-  //       debugPrint(response.data.toString());
-  //       guitarSingleResponse = GuitarSingleResponse.fromJson(response.data);
-  //     } else {
-  //       guitarSingleResponse = null;
-  //     }
-  //   } catch (e) {
-  //     throw Exception(e);
-  //   }
-  //   return guitarSingleResponse;
-  // }
+  Future<MedicineResponse?> getMedByPharmacy(pharmacyId) async {
+    Future.delayed(const Duration(seconds: 2), () {});
+    MedicineResponse? medicineResponse;
+    try {
+      var dio = HttpServices().getDioInstance();
+      Response response = await dio.get(medicineByPharmacyUrl + pharmacyId);
+      if (response.statusCode == 200) {
+        debugPrint(response.data.toString());
+        medicineResponse = MedicineResponse.fromJson(response.data);
+      } else {
+        medicineResponse = null;
+      }
+    } catch (e) {
+      throw Exception(e);
+    }
+    return medicineResponse;
+  }
 }

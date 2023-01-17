@@ -4,5 +4,6 @@ const loginUrl = "user/login";
 const pharmacyUrl = "pharmacy/getall";
 // const medicineUrl = "medicine/getall";
 const medicineUrl = "medicine/all";
+const medicineByPharmacyUrl = "medicine/get/";
 
 String? token;
