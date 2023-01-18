@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:dio_http_cache/dio_http_cache.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
@@ -9,10 +10,12 @@ import 'package:iconify_flutter/iconify_flutter.dart';
 import 'package:iconify_flutter/icons/ep.dart';
 import 'package:medicine_finder/api/http_services.dart';
 import 'package:medicine_finder/model/medicine.dart';
+import 'package:medicine_finder/repository/book_medicine_repository.dart';
 import 'package:medicine_finder/repository/medicine_repository.dart';
 import 'package:medicine_finder/response/medicine_response.dart';
 import 'package:medicine_finder/utils/url.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
+import 'package:motion_toast/motion_toast.dart';
 
 class MyMap extends StatefulWidget {
   const MyMap({super.key});
@@ -22,6 +25,7 @@ class MyMap extends StatefulWidget {
 }
 
 class _MyMapState extends State<MyMap> {
+  int totalPrice = 0;
   GoogleMapController? controller;
   final Set<Marker> _markers = {};
   LatLng myLocation = const LatLng(27.7047139, 85.3295421);
@@ -32,6 +36,9 @@ class _MyMapState extends State<MyMap> {
     markericon();
     super.initState();
   }
+
+  Map<String, dynamic> selectedMed = {};
+  int itemCount = 0;
 
   BitmapDescriptor? markerImage;
   // Custom Marker Code
@@ -91,6 +98,52 @@ class _MyMapState extends State<MyMap> {
     // setState(() {
     //   // _medQuantity--;
     // });
+  }
+
+  int counter = 1;
+
+  _bookMedicine(
+    Medicine medicine,
+    int quantity,
+    int totalPrice,
+    String status,
+  ) async {
+    bool isAdded = await BookedMedicineRepository().bookMedicine(
+      medicine,
+      quantity,
+      totalPrice,
+      status,
+    );
+    if (isAdded) {
+      AwesomeNotifications().createNotification(
+        content: NotificationContent(
+          id: counter,
+          channelKey: 'basic_channel',
+          title: 'Order Success',
+          body: 'Your Order Has Been Placed Successfully',
+        ),
+      );
+      setState(() {
+        counter++;
+      });
+      Navigator.pushNamed(context, "/layout");
+      _displayMessage(isAdded);
+    } else {
+      _displayMessage(isAdded);
+    }
+  }
+
+  _displayMessage(bool isAdded) {
+    if (isAdded) {
+      MotionToast.success(
+              description: const Text("Guitar Order Made Successfully"))
+          .show(context);
+    } else {
+      MotionToast.error(
+              description:
+                  const Text("Something Went Wrong!!! Please Try Again!!!"))
+          .show(context);
+    }
   }
 
   @override
@@ -286,7 +339,7 @@ class _MyMapState extends State<MyMap> {
                         itemCount: snapshot.data!.data!.length,
                         itemBuilder: (BuildContext context, int index) {
                           return medicinemain(
-                              setStateSheet, lstMedicine[index]);
+                              setStateSheet, lstMedicine[index], index);
                         },
                       );
                     } else {
@@ -317,7 +370,9 @@ class _MyMapState extends State<MyMap> {
     );
   }
 
-  Widget medicinemain(StateSetter setStateSheet, Medicine medicine) {
+  List<Medicine?>? lstMed;
+
+  Widget medicinemain(StateSetter setStateSheet, Medicine medicine, int index) {
     return Center(
       child: Stack(
         fit: StackFit.expand,
@@ -349,6 +404,15 @@ class _MyMapState extends State<MyMap> {
                 Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
+                    selectedMed.containsKey(index.toString())
+                        ? Text(
+                            "TotalPrice: " + selectedMed[index.toString()][3],
+                            style: const TextStyle(
+                              color: Colors.white,
+                              fontFamily: "Merienda",
+                            ),
+                          )
+                        : const Text("0"),
                     Text(
                       medicine.medicine_name!,
                       style: const TextStyle(
@@ -380,28 +444,104 @@ class _MyMapState extends State<MyMap> {
                               backgroundColor:
                                   const Color.fromARGB(255, 0, 140, 255),
                             ),
-                            onPressed: () {
+                            onPressed: () => setState(() {
                               _decrementCount(setStateSheet);
-                            },
+                              if (selectedMed.containsKey(index.toString()) &&
+                                  int.parse(selectedMed[index.toString()][1]) >
+                                      0) {
+                                int newCakePound = int.parse(
+                                        selectedMed[index.toString()][1]) -
+                                    1;
+
+                                int newCakePrice = int.parse(
+                                        selectedMed[index.toString()][3]) -
+                                    int.parse(
+                                        medicine.medicine_price.toString());
+                                // setStateSheet(() {
+
+                                // });
+                                selectedMed[index.toString()][1] =
+                                    newCakePound.toString();
+
+                                selectedMed[index.toString()][3] =
+                                    "$newCakePrice";
+
+                                if (selectedMed.containsKey(index.toString()) &&
+                                    int.parse(
+                                            selectedMed[index.toString()][1]) <
+                                        1) {
+                                  itemCount = 0;
+                                  selectedMed.remove(index.toString());
+                                }
+
+                                // setStateSheet(() {
+                                //   totalPrice -= int.parse(
+                                //       medicine.medicine_price.toString());
+                                // });
+                              }
+                              debugPrint(
+                                  "Selected Pounds : ${selectedMed.toString()}");
+                            }),
                             child: const Icon(Icons.remove),
                           ),
-                          Text(
-                            " $_medQuantity",
-                            style: const TextStyle(
-                              fontFamily: "Merienda",
-                              color: Color.fromARGB(255, 255, 255, 255),
-                              fontSize: 21,
-                              fontWeight: FontWeight.w400,
-                            ),
-                          ),
+                          selectedMed.containsKey(index.toString())
+                              ? Text(selectedMed[index.toString()][1])
+                              : const Text("0"),
+                          // Text(
+                          //   " $_medQuantity",
+                          //   style: const TextStyle(
+                          //     fontFamily: "Merienda",
+                          //     color: Color.fromARGB(255, 255, 255, 255),
+                          //     fontSize: 21,
+                          //     fontWeight: FontWeight.w400,
+                          //   ),
+                          // ),
                           ElevatedButton(
                             style: ElevatedButton.styleFrom(
                               backgroundColor:
                                   const Color.fromARGB(255, 0, 140, 255),
                             ),
-                            onPressed: () {
+                            onPressed: () => setState(() {
                               _incrementCount(setStateSheet);
-                            },
+                              if (selectedMed.containsKey(index.toString()) &&
+                                  int.parse(selectedMed[index.toString()][1]) >
+                                      0) {
+                                int newCakePound = int.parse(
+                                        selectedMed[index.toString()][1]) +
+                                    1;
+
+                                int newCakePrice = int.parse(
+                                        selectedMed[index.toString()][3]) +
+                                    int.parse(
+                                        medicine.medicine_price.toString());
+                                debugPrint("NewCake: $newCakePound");
+                                // setStateSheet(() {
+                                selectedMed[index.toString()][1] =
+                                    "$newCakePound";
+                                selectedMed[index.toString()][3] =
+                                    "$newCakePrice";
+                                // });
+                              } else {
+                                itemCount = 1;
+                                int newCakePound = 1;
+                                int newTotalPrice = int.parse(
+                                    medicine.medicine_price.toString());
+
+                                final cakePound = <String, dynamic>{
+                                  index.toString(): [
+                                    medicine.medicine_name,
+                                    "$newCakePound",
+                                    medicine.id,
+                                    "$newTotalPrice",
+                                  ]
+                                };
+                                selectedMed.addEntries(cakePound.entries);
+                              }
+                              // setStateSheet(() {
+                              //   totalPrice += int.parse(
+                              //       medicine.medicine_price.toString());
+                              // });
+                            }),
                             child: const Icon(Icons.add),
                           ),
                         ],
@@ -413,18 +553,28 @@ class _MyMapState extends State<MyMap> {
             ),
           ),
           Positioned(
-              bottom: 2,
-              right: 70,
-              child: ElevatedButton(
-                onPressed: () {},
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: const Color.fromARGB(255, 0, 136, 255),
-                  shape: const RoundedRectangleBorder(
-                    borderRadius: BorderRadius.all(Radius.circular(20)),
-                  ),
+            bottom: 2,
+            right: 70,
+            child: ElevatedButton(
+              onPressed: () {
+                if (_formKey.currentState!.validate()) {
+                  _bookMedicine(
+                    medicine,
+                    int.parse(selectedMed[index.toString()][1]),
+                    int.parse(selectedMed[index.toString()][3]),
+                    "Pending",
+                  );
+                }
+              },
+              style: ElevatedButton.styleFrom(
+                backgroundColor: const Color.fromARGB(255, 0, 136, 255),
+                shape: const RoundedRectangleBorder(
+                  borderRadius: BorderRadius.all(Radius.circular(20)),
                 ),
-                child: const Text("Book Medicine"),
-              )),
+              ),
+              child: const Text("Book Medicine"),
+            ),
+          ),
         ],
       ),
     );

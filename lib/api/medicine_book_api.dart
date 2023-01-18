@@ -32,6 +32,8 @@ class BookMedicineAPI {
         ),
       );
 
+      debugPrint(response.toString());
+
       if (response.statusCode == 201) {
         return isAdded = true;
       }
