@@ -35,6 +35,7 @@ class _MyMapScreenState extends State<MyMapScreen> {
     super.initState();
   }
 
+  // Custom Marker Code
   void markericon() async {
     BitmapDescriptor? markerImage1 = await BitmapDescriptor.fromAssetImage(
         const ImageConfiguration(size: Size(50, 50)),
@@ -44,20 +45,35 @@ class _MyMapScreenState extends State<MyMapScreen> {
     });
   }
 
+  // Google Map Controller
   final Completer<GoogleMapController> _controller =
       Completer<GoogleMapController>();
 
+  // Get My Location Code
   void getLocation() async {
     Position? currentPosition = await Geolocator.getCurrentPosition(
         desiredAccuracy: LocationAccuracy.high);
     CameraPosition cameraPosition = CameraPosition(
         target: LatLng(currentPosition.latitude, currentPosition.longitude),
         zoom: 14);
+
     final GoogleMapController controller = await _controller.future;
     controller.animateCamera(CameraUpdate.newCameraPosition(cameraPosition));
     setState(() {});
   }
 
+  void getNewLocation() async {
+    // Position? currentPosition = await Geolocator.getCurrentPosition(
+    //     desiredAccuracy: LocationAccuracy.high);
+    CameraPosition cameraPosition =
+        const CameraPosition(target: LatLng(58.5645464, 85.654541), zoom: 20);
+
+    final GoogleMapController controller = await _controller.future;
+    controller.animateCamera(CameraUpdate.newCameraPosition(cameraPosition));
+    setState(() {});
+  }
+
+  // Medicine Location
   void getMedicineLocation() async {
     Position? currentPosition = await Geolocator.getCurrentPosition(
         desiredAccuracy: LocationAccuracy.high);
@@ -69,8 +85,27 @@ class _MyMapScreenState extends State<MyMapScreen> {
     setState(() {});
   }
 
+  // Search Bar Controller
   final _formKey = GlobalKey<FormState>();
   final _searchController = TextEditingController();
+
+  int _medQuantity = 1;
+
+  void _incrementCount() {
+    setState(() {
+      _medQuantity++;
+    });
+  }
+
+  void _decrementCount() {
+    setState(() {
+      _medQuantity--;
+    });
+  }
+
+  // // Book Medicine Controller
+  // final _quantity = TextEditingController();
+  // final _total_price = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -88,6 +123,8 @@ class _MyMapScreenState extends State<MyMapScreen> {
             if (snapshot.data != null) {
               // ProductResponse productResponse = snapshot.data!;
               for (int i = 0; i < snapshot.data!.data!.length; i++) {
+                debugPrint(
+                    "${snapshot.data!.data![i].pharmacyId!.id!}Phjarmacy");
                 _markers.add(
                   Marker(
                     markerId: MarkerId(snapshot.data!.data![i].toString()),
@@ -182,7 +219,7 @@ class _MyMapScreenState extends State<MyMapScreen> {
                   child: ElevatedButton(
                     onPressed: () {
                       setState(() {
-                        searchsave = _searchController.text;
+                        Navigator.popAndPushNamed(context, "/nxtmap");
                       });
                     },
                     style: ElevatedButton.styleFrom(
@@ -210,6 +247,7 @@ class _MyMapScreenState extends State<MyMapScreen> {
   }
 
   Widget _showModalBottomSheet(StateSetter setStateSheet, String pharmacyId) {
+    debugPrint("Pharmacy ID:$pharmacyId");
     return SingleChildScrollView(
       child: Padding(
         padding: const EdgeInsets.fromLTRB(18, 8, 18, 0),
@@ -241,10 +279,10 @@ class _MyMapScreenState extends State<MyMapScreen> {
                         gridDelegate:
                             const SliverGridDelegateWithFixedCrossAxisCount(
                           // childAspectRatio: 50 / 60,
-                          crossAxisCount: 2,
+                          crossAxisCount: 1,
                           mainAxisSpacing: 8,
                           crossAxisSpacing: 20,
-                          mainAxisExtent: 220,
+                          mainAxisExtent: 180,
                         ),
                         itemCount: snapshot.data!.data!.length,
                         itemBuilder: (BuildContext context, int index) {
@@ -288,70 +326,111 @@ class _MyMapScreenState extends State<MyMapScreen> {
   }
 
   Widget medicinemain(Medicine medicine) {
-    return Stack(
-      fit: StackFit.expand,
-      children: [
-        Container(
-          // height: double.infinity,
-          // width: MediaQuery.of(context).size.width,
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(12),
-            color: const Color(0xFF6BB3ED),
+    return Center(
+      child: Stack(
+        fit: StackFit.expand,
+        children: [
+          Container(
+            // height: double.infinity,
+            // width: MediaQuery.of(context).size.width,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(12),
+              color: const Color(0xFF6BB3ED),
+            ),
+            padding: const EdgeInsets.fromLTRB(20, 12, 20, 12),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                CircleAvatar(
+                  radius: 52,
+                  backgroundColor: const Color.fromARGB(255, 255, 255, 255),
+                  // backgroundImage:
+                  //     NetworkImage("$baseUrl${guitar.guitar_image!}"),
+                  child: ClipRect(
+                    child: Image.network("$baseUrl${medicine.medicine_image!}",
+                        height: 74, width: 74),
+                  ),
+                ),
+                const SizedBox(
+                  height: 8,
+                ),
+                Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      medicine.medicine_name!,
+                      style: const TextStyle(
+                        color: Colors.white,
+                        fontWeight: FontWeight.bold,
+                        // fontSize: 20,
+                        fontFamily: 'Merienda',
+                      ),
+                    ),
+                    const SizedBox(
+                      height: 6,
+                    ),
+                    Text(
+                      "Rs. ${medicine.medicine_price!}",
+                      style: const TextStyle(
+                        color: Colors.white,
+                        fontWeight: FontWeight.bold,
+                        // fontSize: 20,
+                        fontFamily: 'Merienda',
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(30, 4, 30, 4),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        children: [
+                          ElevatedButton(
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor:
+                                  const Color.fromARGB(255, 0, 140, 255),
+                            ),
+                            onPressed: _decrementCount,
+                            child: const Icon(Icons.remove),
+                          ),
+                          Text(
+                            " $_medQuantity",
+                            style: const TextStyle(
+                              fontFamily: "Merienda",
+                              color: Color.fromARGB(255, 255, 255, 255),
+                              fontSize: 21,
+                              fontWeight: FontWeight.w400,
+                            ),
+                          ),
+                          ElevatedButton(
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor:
+                                  const Color.fromARGB(255, 0, 140, 255),
+                            ),
+                            onPressed: _incrementCount,
+                            child: const Icon(Icons.add),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
           ),
-          padding: const EdgeInsets.fromLTRB(20, 12, 20, 12),
-          child: Column(
-            children: [
-              CircleAvatar(
-                radius: 46,
-                backgroundColor: const Color.fromARGB(255, 255, 255, 255),
-                // backgroundImage:
-                //     NetworkImage("$baseUrl${guitar.guitar_image!}"),
-                child: ClipRect(
-                  child: Image.network("$baseUrl${medicine.medicine_image!}",
-                      height: 64, width: 64),
+          Positioned(
+              bottom: 2,
+              right: 70,
+              child: ElevatedButton(
+                onPressed: () {},
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: const Color.fromARGB(255, 0, 136, 255),
+                  shape: const RoundedRectangleBorder(
+                    borderRadius: BorderRadius.all(Radius.circular(20)),
+                  ),
                 ),
-              ),
-              const SizedBox(
-                height: 12,
-              ),
-              Text(
-                medicine.medicine_name!,
-                style: const TextStyle(
-                  color: Colors.white,
-                  fontWeight: FontWeight.bold,
-                  // fontSize: 20,
-                  fontFamily: 'Merienda',
-                ),
-              ),
-              const SizedBox(
-                height: 6,
-              ),
-              Text(
-                "Rs. ${medicine.medicine_price!}",
-                style: const TextStyle(
-                  color: Colors.white,
-                  fontWeight: FontWeight.bold,
-                  // fontSize: 20,
-                  fontFamily: 'Merienda',
-                ),
-              ),
-            ],
-          ),
-        ),
-        Positioned(
-            bottom: 8,
-            left: 22,
-            child: ElevatedButton(
-              onPressed: () {},
-              style: ElevatedButton.styleFrom(
-                backgroundColor: const Color.fromARGB(255, 0, 136, 255),
-                shape: const RoundedRectangleBorder(
-                  borderRadius: BorderRadius.all(Radius.circular(20)),
-                ),
-              ),
-              child: const Text("Book Medicine"),
-            )),
-      ],
+                child: const Text("Book Medicine"),
+              )),
+        ],
+      ),
     );
   }
 }
