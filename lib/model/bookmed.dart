@@ -1,5 +1,5 @@
 import 'package:json_annotation/json_annotation.dart';
-import 'package:medicine_finder/model/medicine.dart';
+import 'package:medicine_finder/model/medicinebook.dart';
 import 'package:medicine_finder/model/user.dart';
 
 part 'bookmed.g.dart';
@@ -8,7 +8,7 @@ part 'bookmed.g.dart';
 class BookMedicine {
   @JsonKey(name: '_id')
   String? id;
-  Medicine? medicine;
+  MedicineBook? medicine;
   User? userId;
   int? quantity;
   int? total_price;

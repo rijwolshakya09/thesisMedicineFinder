@@ -11,7 +11,7 @@ BookMedicine _$BookMedicineFromJson(Map<String, dynamic> json) {
     id: json['_id'] as String?,
     medicine: json['medicine'] == null
         ? null
-        : Medicine.fromJson(json['medicine'] as Map<String, dynamic>),
+        : MedicineBook.fromJson(json['medicine'] as Map<String, dynamic>),
     userId: json['userId'] == null
         ? null
         : User.fromJson(json['userId'] as Map<String, dynamic>),

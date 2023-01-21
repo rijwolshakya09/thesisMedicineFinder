@@ -10,8 +10,8 @@ import 'package:medicine_finder/screen/homescreen.dart';
 import 'package:iconify_flutter/iconify_flutter.dart';
 import 'package:iconify_flutter/icons/majesticons.dart';
 import 'package:iconify_flutter/icons/ph.dart';
+import 'package:medicine_finder/screen/mybooking.dart';
 import 'package:medicine_finder/screen/mymap.dart';
-import 'package:medicine_finder/screen/nxtmap.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 // import '../model/customappbarlogin.dart';
@@ -29,7 +29,7 @@ class _LayoutScreenState extends State<LayoutScreen> {
   List<Widget> lstWidget = [
     const HomeScreen(),
     const MyMapScreen(),
-    const MyMap(),
+    const MyBookingScreen(),
   ];
 
   _removeDataFromSharedPref() async {

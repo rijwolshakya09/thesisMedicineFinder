@@ -62,24 +62,26 @@ class BookMedicineAPI {
         ),
       );
       debugPrint(response.data!.toString());
-      if (response.statusCode == 200) {
+      if (response.statusCode == 201) {
         bookMedicineResponse = BookMedicineResponse.fromJson(response.data);
         for (var data in bookMedicineResponse.data!) {
-          bookedMedicineResponseList.add(BookMedicine(
-            id: data.id,
-            medicine: data.medicine,
-            userId: data.userId,
-            quantity: data.quantity,
-            total_price: data.total_price,
-            status: data.status,
-          ));
+          bookedMedicineResponseList.add(
+            BookMedicine(
+              id: data.id,
+              medicine: data.medicine,
+              userId: data.userId,
+              quantity: data.quantity,
+              total_price: data.total_price,
+              status: data.status,
+            ),
+          );
         }
       } else {
         bookMedicineResponse = null;
       }
     } catch (e) {
       // throw Exception(e);
-      debugPrint("error$e");
+      debugPrint("error.........$e");
     }
     return bookedMedicineResponseList;
   }
