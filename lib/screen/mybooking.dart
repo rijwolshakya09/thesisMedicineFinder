@@ -68,6 +68,13 @@ class _MyBookingScreenState extends State<MyBookingScreen> {
               ),
               child: Column(
                 children: [
+                  const Text(
+                    "My Bookings",
+                    style: TextStyle(
+                        fontFamily: "Merienda",
+                        fontSize: 24,
+                        color: Colors.white),
+                  ),
                   SizedBox(
                     height: MediaQuery.of(context).size.height * 0.75,
                     width: double.infinity,
@@ -185,7 +192,7 @@ class _MyBookingScreenState extends State<MyBookingScreen> {
             ),
             CircleAvatar(
               radius: 40,
-              backgroundColor: const Color(0xFFbdbfe9),
+              // backgroundColor: const Color(0xFFbdbfe9),
               // backgroundImage:
               //     NetworkImage("$baseUrl${guitar.guitar_image!}"),
               child: ClipRect(
@@ -224,7 +231,7 @@ class _MyBookingScreenState extends State<MyBookingScreen> {
                     height: 6,
                   ),
                   Text(
-                    "Quantity: ${bookedMedicine.status!}",
+                    "Status: ${bookedMedicine.status!}",
                     style: const TextStyle(
                       fontSize: 12,
                       color: Colors.white,

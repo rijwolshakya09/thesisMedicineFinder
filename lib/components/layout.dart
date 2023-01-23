@@ -2,14 +2,15 @@ import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:iconify_flutter/icons/fa_solid.dart';
 import 'package:iconify_flutter/icons/material_symbols.dart';
-import 'package:iconify_flutter/icons/mingcute.dart';
 import 'package:iconify_flutter/icons/ri.dart';
 import 'package:iconify_flutter/icons/simple_icons.dart';
 import 'package:medicine_finder/model/customappbarlogin.dart';
+import 'package:medicine_finder/model/showprofile.dart';
+import 'package:medicine_finder/repository/profile_repository.dart';
+import 'package:medicine_finder/response/profile_response.dart';
 import 'package:medicine_finder/screen/homescreen.dart';
 import 'package:iconify_flutter/iconify_flutter.dart';
 import 'package:iconify_flutter/icons/majesticons.dart';
-import 'package:iconify_flutter/icons/ph.dart';
 import 'package:medicine_finder/screen/mybooking.dart';
 import 'package:medicine_finder/screen/mymap.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -78,7 +79,7 @@ class _LayoutScreenState extends State<LayoutScreen> {
             size: 30,
           ),
           Iconify(
-            MaterialSymbols.settings,
+            MaterialSymbols.medical_information,
             color: Colors.white,
             size: 30,
           ),
@@ -122,7 +123,7 @@ class _LayoutScreenState extends State<LayoutScreen> {
               ),
               iconSize: 100,
               onPressed: () {
-                Navigator.pushNamed(context, '/addtocart');
+                Navigator.pushNamed(context, '/profile');
               },
             ),
           ),
@@ -159,171 +160,200 @@ class _LayoutScreenState extends State<LayoutScreen> {
         child: ListView(
           padding: EdgeInsets.zero,
           children: [
-            // FutureBuilder<ProfileResponse?>(
-            //   future: ProfileRepository().getProfile(),
-            //   builder: (context, snapshot) {
-            //     // debugPrint(snapshot.data!.data!.address.toString());
-            //     if (snapshot.connectionState == ConnectionState.done) {
-            //       if (snapshot.data != null) {
-            //         // ProductResponse productResponse = snapshot.data!;
-            //         ShowProfile lstProfile = snapshot.data!.data!;
-            //         return UserAccountsDrawerHeader(
-            //           accountName: Text(
-            //             lstProfile.full_name!,
-            //             style: const TextStyle(
-            //               // color: Color(0xFF535699),
-            //               fontWeight: FontWeight.bold,
-            //               fontSize: 18,
-            //               fontFamily: 'Merienda',
-            //             ),
-            //           ),
-            //           accountEmail: Text(
-            //             lstProfile.email!,
-            //             style: const TextStyle(
-            //               // color: Color(0xFF535699),
-            //               fontWeight: FontWeight.bold,
-            //               fontSize: 12,
-            //               fontFamily: 'Merienda',
-            //             ),
-            //           ),
-            //           currentAccountPicture: CircleAvatar(
-            //             child: ClipOval(
-            //               child: Image.network(
-            //                 "$baseUrl${lstProfile.profile_pic!}",
-            //                 width: 80,
-            //                 height: 80,
-            //                 fit: BoxFit.fitWidth,
-            //               ),
-            //             ),
-            //           ),
-            //           decoration: const BoxDecoration(
-            //             color: Color(0xFF535699),
-            //           ),
-            //         );
-            //       } else {
-            //         return const Center(
-            //           child: Text("No data"),
-            //         );
-            //       }
-            //     } else if (snapshot.connectionState ==
-            //         ConnectionState.waiting) {
-            //       return const Center(
-            //         child: CircularProgressIndicator(),
-            //       );
-            //     } else if (snapshot.hasError) {
-            //       return Text("${snapshot.error}");
-            //     } else {
-            //       return const Center(
-            //         child: CircularProgressIndicator(
-            //           valueColor: AlwaysStoppedAnimation<Color>(Colors.blue),
-            //         ),
-            //       );
-            //     }
-            //   },
-            // ),
+            FutureBuilder<ProfileResponse?>(
+              future: ProfileRepository().getProfile(),
+              builder: (context, snapshot) {
+                // debugPrint(snapshot.data!.data!.address.toString());
+                if (snapshot.connectionState == ConnectionState.done) {
+                  if (snapshot.data != null) {
+                    // ProductResponse productResponse = snapshot.data!;
+                    ShowProfile lstProfile = snapshot.data!.data!;
+                    return UserAccountsDrawerHeader(
+                      accountName: Text(
+                        lstProfile.first_name! + lstProfile.last_name!,
+                        style: const TextStyle(
+                          // color: Color(0xFF535699),
+                          fontWeight: FontWeight.bold,
+                          fontSize: 18,
+                          fontFamily: 'Merienda',
+                        ),
+                      ),
+                      accountEmail: Text(
+                        lstProfile.email!,
+                        style: const TextStyle(
+                          // color: Color(0xFF535699),
+                          fontWeight: FontWeight.bold,
+                          fontSize: 12,
+                          fontFamily: 'Merienda',
+                        ),
+                      ),
+                      currentAccountPicture: CircleAvatar(
+                        child: ClipOval(
+                          child: Image.asset(
+                            'assets/images/profilepic.jpg',
+                            width: 80,
+                            height: 80,
+                            fit: BoxFit.fitWidth,
+                          ),
+                        ),
+                      ),
+                      decoration: const BoxDecoration(
+                        color: Color.fromARGB(255, 51, 149, 228),
+                      ),
+                    );
+                  } else {
+                    return const Center(
+                      child: Text("No data"),
+                    );
+                  }
+                } else if (snapshot.connectionState ==
+                    ConnectionState.waiting) {
+                  return const Center(
+                    child: CircularProgressIndicator(),
+                  );
+                } else if (snapshot.hasError) {
+                  return Text("${snapshot.error}");
+                } else {
+                  return const Center(
+                    child: CircularProgressIndicator(
+                      valueColor: AlwaysStoppedAnimation<Color>(Colors.blue),
+                    ),
+                  );
+                }
+              },
+            ),
             Padding(
               padding: const EdgeInsets.all(8.0),
               child: Column(
                 children: [
                   ListTile(
                     leading: const Iconify(
-                      Mingcute.notebook_fill,
-                      color: Color(0xFF535699),
+                      Ri.user_4_fill,
+                      color: Color.fromARGB(255, 51, 149, 228),
                       size: 34,
                     ),
                     title: const Text(
                       'My Profile',
                       style: TextStyle(
-                        color: Color(0xFF535699),
-                        fontWeight: FontWeight.bold,
-                        fontSize: 14,
-                        fontFamily: 'Merienda',
-                      ),
-                    ),
-                    onTap: () {},
-                  ),
-                  const Divider(
-                    color: Color(0xFF535699),
-                    indent: 5,
-                    endIndent: 5,
-                    thickness: 2,
-                  ),
-                  ListTile(
-                    key: const ValueKey("aboutusbtn"),
-                    leading: const Iconify(
-                      Ph.info_fill,
-                      color: Color(0xFF535699),
-                      size: 34,
-                    ),
-                    title: const Text(
-                      'About Us',
-                      style: TextStyle(
-                        color: Color(0xFF535699),
+                        color: Color.fromARGB(255, 51, 149, 228),
                         fontWeight: FontWeight.bold,
                         fontSize: 14,
                         fontFamily: 'Merienda',
                       ),
                     ),
                     onTap: () {
-                      setState(() {
-                        Navigator.pushNamed(context, '/about');
-                      });
+                      Navigator.pushNamed(context, "/profile");
                     },
                   ),
                   const Divider(
-                    color: Color(0xFF535699),
+                    color: Color.fromARGB(255, 51, 149, 228),
                     indent: 5,
                     endIndent: 5,
                     thickness: 2,
                   ),
-                  ListTile(
-                    leading: const Iconify(
-                      Ph.heart_fill,
-                      color: Color(0xFF535699),
-                      size: 34,
-                    ),
-                    title: const Text(
-                      'Wishlist',
-                      style: TextStyle(
-                        color: Color(0xFF535699),
-                        fontWeight: FontWeight.bold,
-                        fontSize: 14,
-                        fontFamily: 'Merienda',
-                      ),
-                    ),
-                    onTap: () {
-                      setState(() {
-                        Navigator.pushNamed(context, '/wishlist');
-                      });
-                    },
-                  ),
-                  const Divider(
-                    color: Color(0xFF535699),
-                    indent: 5,
-                    endIndent: 5,
-                    thickness: 2,
-                  ),
+                  // ListTile(
+                  //   key: const ValueKey("aboutusbtn"),
+                  //   leading: const Iconify(
+                  //     Ph.info_fill,
+                  //     color: Color.fromARGB(255, 51, 149, 228),
+                  //     size: 34,
+                  //   ),
+                  //   title: const Text(
+                  //     'About Us',
+                  //     style: TextStyle(
+                  //       color: Color.fromARGB(255, 51, 149, 228),
+                  //       fontWeight: FontWeight.bold,
+                  //       fontSize: 14,
+                  //       fontFamily: 'Merienda',
+                  //     ),
+                  //   ),
+                  //   onTap: () {
+                  //     setState(() {
+                  //       Navigator.pushNamed(context, '/about');
+                  //     });
+                  //   },
+                  // ),
+                  // const Divider(
+                  //   color: Color.fromARGB(255, 51, 149, 228),
+                  //   indent: 5,
+                  //   endIndent: 5,
+                  //   thickness: 2,
+                  // ),
+                  // ListTile(
+                  //   leading: const Iconify(
+                  //     Ph.heart_fill,
+                  //     color: Color.fromARGB(255, 51, 149, 228),
+                  //     size: 34,
+                  //   ),
+                  //   title: const Text(
+                  //     'Wishlist',
+                  //     style: TextStyle(
+                  //       color: Color.fromARGB(255, 51, 149, 228),
+                  //       fontWeight: FontWeight.bold,
+                  //       fontSize: 14,
+                  //       fontFamily: 'Merienda',
+                  //     ),
+                  //   ),
+                  //   onTap: () {
+                  //     setState(() {
+                  //       Navigator.pushNamed(context, '/mybooking');
+                  //     });
+                  //   },
+                  // ),
+                  // const Divider(
+                  //   color: Color.fromARGB(255, 51, 149, 228),
+                  //   indent: 5,
+                  //   endIndent: 5,
+                  //   thickness: 2,
+                  // ),
                   ListTile(
                     leading: const Iconify(
                       Majesticons.clipboard_list,
-                      color: Color(0xFF535699),
+                      color: Color.fromARGB(255, 51, 149, 228),
                       size: 34,
                     ),
                     title: const Text(
-                      'Order History',
+                      'My Booking',
                       style: TextStyle(
-                        color: Color(0xFF535699),
+                        color: Color.fromARGB(255, 51, 149, 228),
                         fontWeight: FontWeight.bold,
                         fontSize: 14,
                         fontFamily: 'Merienda',
                       ),
                     ),
                     onTap: () {
-                      Navigator.pushNamed(context, "/showorder");
+                      Navigator.pushNamed(context, "/mybooking");
                     },
                   ),
                   const Divider(
-                    color: Color(0xFF535699),
+                    color: Color.fromARGB(255, 51, 149, 228),
+                    indent: 5,
+                    endIndent: 5,
+                    thickness: 2,
+                  ),
+                  ListTile(
+                    leading: const Iconify(
+                      MaterialSymbols.settings_outline,
+                      color: Color.fromARGB(255, 51, 149, 228),
+                      size: 34,
+                    ),
+                    title: const Text(
+                      'Settings',
+                      style: TextStyle(
+                        color: Color.fromARGB(255, 51, 149, 228),
+                        fontWeight: FontWeight.bold,
+                        fontSize: 14,
+                        fontFamily: 'Merienda',
+                      ),
+                    ),
+                    onTap: () {
+                      setState(() {
+                        Navigator.pushNamed(context, '/settings');
+                      });
+                    },
+                  ),
+                  const Divider(
+                    color: Color.fromARGB(255, 51, 149, 228),
                     indent: 5,
                     endIndent: 5,
                     thickness: 2,
@@ -331,13 +361,13 @@ class _LayoutScreenState extends State<LayoutScreen> {
                   ListTile(
                     leading: const Iconify(
                       Majesticons.door_exit,
-                      color: Color(0xFF535699),
+                      color: Color.fromARGB(255, 51, 149, 228),
                       size: 34,
                     ),
                     title: const Text(
                       'Logout',
                       style: TextStyle(
-                        color: Color(0xFF535699),
+                        color: Color.fromARGB(255, 51, 149, 228),
                         fontWeight: FontWeight.bold,
                         fontSize: 14,
                         fontFamily: 'Merienda',

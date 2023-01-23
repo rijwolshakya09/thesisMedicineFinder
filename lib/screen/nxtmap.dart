@@ -136,13 +136,12 @@ class _MyMapState extends State<MyMap> {
   _displayMessage(bool isAdded) {
     if (isAdded) {
       MotionToast.success(
-              description: const Text("Guitar Order Made Successfully"))
-          .show(context);
+        description: const Text("Medicine Booked Successfully"),
+      ).show(context);
     } else {
       MotionToast.error(
-              description:
-                  const Text("Something Went Wrong!!! Please Try Again!!!"))
-          .show(context);
+        description: const Text("Something Went Wrong!!! Please Try Again!!!"),
+      ).show(context);
     }
   }
 

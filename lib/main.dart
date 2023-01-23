@@ -2,8 +2,10 @@ import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:flutter/material.dart';
 import 'package:medicine_finder/components/layout.dart';
 import 'package:medicine_finder/screen/loginscreen.dart';
+import 'package:medicine_finder/screen/mybooking.dart';
 import 'package:medicine_finder/screen/mymap.dart';
 import 'package:medicine_finder/screen/nxtmap.dart';
+import 'package:medicine_finder/screen/profilescreen.dart';
 import 'package:medicine_finder/screen/registerscreen.dart';
 import 'package:medicine_finder/screen/splashscreen.dart';
 
@@ -34,6 +36,8 @@ void main() {
       '/register': (context) => const RegisterScreen(),
       '/mymap': (context) => const MyMapScreen(),
       '/nxtmap': (context) => const MyMap(),
+      '/profile': (context) => const ProfileScreen(),
+      '/mybooking': (context) => const MyBookingScreen(),
     },
   ));
 }
