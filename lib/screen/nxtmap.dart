@@ -58,7 +58,7 @@ class _MyMapState extends State<MyMap> {
     // Position? currentPosition = await Geolocator.getCurrentPosition(
     //     desiredAccuracy: LocationAccuracy.high);
     CameraPosition cameraPosition =
-        const CameraPosition(target: LatLng(58.5645464, 85.654541), zoom: 14);
+        const CameraPosition(target: LatLng(27.629882, 85.523381), zoom: 18);
     final GoogleMapController controller = await _controller.future;
     controller.animateCamera(CameraUpdate.newCameraPosition(cameraPosition));
     setState(() {});
